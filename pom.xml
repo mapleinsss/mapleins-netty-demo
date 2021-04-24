@@ -11,6 +11,8 @@
     <modules>
         <module>defintive_guide</module>
         <module>netty_in_action</module>
+        <module>maple_netty_test</module>
+        <module>maple_nio_demo</module>
     </modules>
 
     <properties>
