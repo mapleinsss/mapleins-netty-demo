@@ -1,5 +1,6 @@
 package org.maple.ch6;
 
+import org.maple.ch6.demo02.UserInfo;
 import org.msgpack.MessagePack;
 import org.msgpack.template.Templates;
 
@@ -22,5 +23,12 @@ public class MsgPackDemo01 {
         // 反序列化
         System.out.println(msgPack.read(raw, Templates.tList(Templates.TString)));
 
+        UserInfo userInfo = new UserInfo();
+        userInfo.setName("Allen");
+        userInfo.setAge(18);
+        // 序列化
+        byte[] raw1 = msgPack.write(userInfo);
+        // 反序列化
+        System.out.println(msgPack.read(raw1));
     }
 }

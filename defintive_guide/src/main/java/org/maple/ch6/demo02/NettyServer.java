@@ -13,6 +13,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.FixedLengthFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
 import lombok.extern.log4j.Log4j2;
+import org.msgpack.MessagePack;
 
 import java.util.List;
 
@@ -41,10 +42,18 @@ public class NettyServer {
 
                                 @Override
                                 public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-                                    List<Object> students = (List<Object>) msg;
-                                    log.debug("students is : {}, counter is {}", students , ++counter);
-//                                    ByteBuf resp = Unpooled.copiedBuffer(students.getBytes());
-//                                    ctx.write(resp);
+                                    log.debug("userInfo is : {}, counter is {}", msg , ++counter);
+                                    ctx.write(msg);
+                                }
+
+                                @Override
+                                public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+                                    ctx.flush();
+                                }
+
+                                @Override
+                                public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+                                    cause.printStackTrace();
                                 }
                             });
                         }

@@ -1,5 +1,8 @@
 package org.maple.ch6.demo02;
 
+import org.msgpack.annotation.Message;
+
+@Message
 public class UserInfo {
 
     private String name;

@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * MsgPack 解码器 
- * 将 ByteBuf 中的数据读出后，从 msgpack 转回原来的数据
+ * 将 ByteBuf 中的数据读出后，从 msgpack 转回 Object
  */
 public class MsgPackDecoder extends MessageToMessageDecoder<ByteBuf> {
 

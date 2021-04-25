@@ -30,14 +30,14 @@ public class NettyClient {
                             socketChannel.pipeline().addLast(new MsgPackEncoder());
                             socketChannel.pipeline().addLast(new ChannelInboundHandlerAdapter() {
 
-//                                private int counter;
+                                private int counter;
 
                                 @Override
                                 public void channelActive(ChannelHandlerContext ctx) throws Exception {
                                     UserInfo loopUser;
                                     for (int i = 1; i <= 10; i++) {
                                         loopUser = new UserInfo();
-                                        loopUser.setName("Allen "+i);
+                                        loopUser.setName("Allen");
                                         loopUser.setAge(i);
                                         ctx.writeAndFlush(loopUser);
                                     }
@@ -45,9 +45,13 @@ public class NettyClient {
 
                                 @Override
                                 public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-//                                    log.debug("received msg is {} , counter is : {}", msg, ++counter);
+                                    log.debug("received msg is {} , counter is : {}", msg, ++counter);
                                 }
 
+                                @Override
+                                public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+                                    cause.printStackTrace();
+                                }
                             });
                         }
                     })
