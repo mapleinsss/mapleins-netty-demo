@@ -1,4 +1,4 @@
-package org.maple.bytebuffer;
+package org.maple.util;
 
 import io.netty.util.internal.StringUtil;
 

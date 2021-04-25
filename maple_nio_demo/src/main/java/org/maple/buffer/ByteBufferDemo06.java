@@ -1,6 +1,7 @@
-package org.maple.bytebuffer;
+package org.maple.buffer;
 
 import lombok.extern.log4j.Log4j2;
+import org.maple.util.ByteBufferUtil;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -16,7 +17,7 @@ public class ByteBufferDemo06 {
         buffer1.put("hello".getBytes(StandardCharsets.UTF_8));
         ByteBufferUtil.debugAll(buffer1);
 
-        // StandardCharsets，分配字符串长度的空间，并且自动切换为读模式
+        // Charset，分配字符串长度的空间，并且自动切换为读模式
         ByteBuffer buffer2 = StandardCharsets.UTF_8.encode("hello");
         // HeapByteBuffer
         log.debug(buffer2.getClass());
@@ -33,7 +34,7 @@ public class ByteBufferDemo06 {
         ByteBufferUtil.debugAll(buffer2);
 
 
-        // 对于读模式的 buffer，StandardCharsets 将 ByteBuffer 转字符串
+        // 对于读模式的 buffer，Charset 将 ByteBuffer 转字符串
         log.debug(StandardCharsets.UTF_8.decode(buffer2).toString());
 
         // 对于写模式的 buffer 需要先切换为读模式
