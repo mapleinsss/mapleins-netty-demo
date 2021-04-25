@@ -1,4 +1,4 @@
-package ch3.demo01;
+package org.maple.ch3.demo01;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -7,10 +7,23 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.log4j.Log4j2;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
 
 @Log4j2
-public class TimeServerHandler extends ChannelInboundHandlerAdapter {
+public class TimeClientHandler extends ChannelInboundHandlerAdapter {
+
+    private final ByteBuf firstMessage;
+
+    public TimeClientHandler() {
+        byte[] req = "QUERY TIME".getBytes();
+        firstMessage = Unpooled.buffer(req.length);
+        firstMessage.writeBytes(req);
+    }
+
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        //链路建立的时候发送第一条消息
+        ctx.writeAndFlush(firstMessage);
+    }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -18,21 +31,13 @@ public class TimeServerHandler extends ChannelInboundHandlerAdapter {
         byte[] bytes = new byte[buf.readableBytes()];
         buf.readBytes(bytes);
         String body = new String(bytes, StandardCharsets.UTF_8);
-        log.debug("The Time server receive order: {}", body);
-        String currentTime = "QUERY TIME".equalsIgnoreCase(body) ? new Date(System.currentTimeMillis()).toString() : "BAD QUERY";
-        ByteBuf resp = Unpooled.copiedBuffer(currentTime.getBytes());
-        //不是写到channel，而是写到buffer，通过下面的flush真正写到SocketChannel
-        ctx.write(resp);
-    }
-
-    @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-        ctx.flush();
+        log.debug("Now is : {}" , body);
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        log.debug("Exception");
+        cause.printStackTrace();
         ctx.close();
     }
-
 }

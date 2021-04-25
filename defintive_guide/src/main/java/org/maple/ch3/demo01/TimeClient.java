@@ -1,4 +1,4 @@
-package ch3.demo01;
+package org.maple.ch3.demo01;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
