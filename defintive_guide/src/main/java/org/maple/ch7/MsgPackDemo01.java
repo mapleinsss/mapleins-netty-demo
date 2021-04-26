@@ -1,6 +1,6 @@
-package org.maple.ch6;
+package org.maple.ch7;
 
-import org.maple.ch6.demo02.UserInfo;
+import org.maple.ch7.demo02.UserInfo;
 import org.msgpack.MessagePack;
 import org.msgpack.template.Templates;
 

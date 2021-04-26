@@ -1,4 +1,4 @@
-package org.maple.ch6.demo02;
+package org.maple.ch7.demo02;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

@@ -1,8 +1,6 @@
-package org.maple.ch6.demo02;
+package org.maple.ch8.protobuf_netty;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelInitializer;
@@ -10,8 +8,17 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.codec.LengthFieldPrepender;
+import io.netty.handler.codec.protobuf.ProtobufDecoder;
+import io.netty.handler.codec.protobuf.ProtobufEncoder;
+import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
+import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import lombok.extern.log4j.Log4j2;
+import org.maple.ch7.demo02.MsgPackDecoder;
+import org.maple.ch7.demo02.MsgPackEncoder;
+import org.maple.ch7.demo02.UserInfo;
+import org.maple.ch8.protobuf_test.Person;
 
 @Log4j2
 public class NettyClient {
@@ -25,21 +32,23 @@ public class NettyClient {
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
-
-                            socketChannel.pipeline().addLast(new MsgPackDecoder());
-                            socketChannel.pipeline().addLast(new MsgPackEncoder());
+                            socketChannel.pipeline().addLast(new ProtobufVarint32FrameDecoder());
+                            socketChannel.pipeline().addLast(new ProtobufDecoder(Person.person.getDefaultInstance()));
+                            socketChannel.pipeline().addLast(new ProtobufVarint32LengthFieldPrepender());
+                            socketChannel.pipeline().addLast(new ProtobufEncoder());
                             socketChannel.pipeline().addLast(new ChannelInboundHandlerAdapter() {
 
                                 private int counter;
 
                                 @Override
                                 public void channelActive(ChannelHandlerContext ctx) throws Exception {
-                                    UserInfo loopUser;
                                     for (int i = 1; i <= 10; i++) {
-                                        loopUser = new UserInfo();
-                                        loopUser.setName("Allen");
-                                        loopUser.setAge(i);
-                                        ctx.writeAndFlush(loopUser);
+                                        Person.person person = Person.person.newBuilder()
+                                                .setId(i)
+                                                .setName("Allen")
+                                                .setAge(i+20)
+                                                .build();
+                                        ctx.writeAndFlush(person);
                                     }
                                 }
 
