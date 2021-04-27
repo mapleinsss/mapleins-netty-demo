@@ -1,4 +1,4 @@
-package org.maple.ch12;
+package org.maple.ch12.protocol;
 
 import lombok.Data;
 
@@ -12,7 +12,7 @@ import java.util.Map;
 public final class Header {
 
     /**
-     * Netty 消息的验证码，三部分组成
+     * Netty 消息的验证码，类似魔数，三部分组成
      *  - 0xABEF：固定值，表名该消息是 Netty 协议消息，2 个字节
      *  - 主版本号：1 ~ 255，1 个字节
      *  - 此版本好：1 ~ 255，1 个字节
@@ -37,6 +37,6 @@ public final class Header {
     // 消息优先级 0 ~ 255
     private byte priority;
     // 附件，扩展消息头
-    private Map<String,Object> attachment = new HashMap<String,Object>();
+    private Map<String,Object> attachment = new HashMap<>();
 
 }

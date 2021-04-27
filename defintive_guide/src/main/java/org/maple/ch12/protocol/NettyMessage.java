@@ -1,4 +1,4 @@
-package org.maple.ch12;
+package org.maple.ch12.protocol;
 
 import lombok.Data;
 

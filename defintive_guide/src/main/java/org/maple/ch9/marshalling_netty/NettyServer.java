@@ -11,12 +11,14 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.FixedLengthFrameDecoder;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
+import io.netty.handler.codec.marshalling.MarshallingDecoder;
+import io.netty.handler.codec.marshalling.MarshallingEncoder;
 import io.netty.handler.codec.string.StringDecoder;
 import lombok.extern.log4j.Log4j2;
 
 /**
  * Marshalling 默认支持半包/粘包处理
- *
+ * 因为它 extends LengthFieldBasedFrameDecoder
  * 未调通
  */
 @Log4j2
@@ -32,11 +34,8 @@ public class NettyServer {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel channel) throws Exception {
-//                            channel.pipeline().addLast(new LengthFieldBasedFrameDecoder(65535, 0, 2 ,0 ,2));
                             channel.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingDecoder());
-//                            channel.pipeline().addLast(new LengthFieldPrepender(2));
                             channel.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingEncoder());
-
                             channel.pipeline().addLast(new ChannelInboundHandlerAdapter() {
 
                                 private int counter = 0;
